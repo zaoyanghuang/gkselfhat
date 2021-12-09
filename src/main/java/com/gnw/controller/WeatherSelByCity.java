@@ -138,8 +138,8 @@ public class WeatherSelByCity {
         String weatherInfoTwo=getWeatherDataTwo(cityId);
         JSONObject dataOfJsonOne = JSONObject.parseObject(weatherInfoOne);
         JSONObject dataOfJsonTwo = JSONObject.parseObject(weatherInfoTwo);
-        System.out.println("dataOfJsonOne==========="+dataOfJsonOne);
-        System.out.println("dataOfJsonTwo==========="+dataOfJsonTwo);
+        //System.out.println("dataOfJsonOne==========="+dataOfJsonOne);
+        //System.out.println("dataOfJsonTwo==========="+dataOfJsonTwo);
         if(dataOfJsonOne.getIntValue("code")!=200 && dataOfJsonTwo.getIntValue("code")!=200) {
             return null;
         }

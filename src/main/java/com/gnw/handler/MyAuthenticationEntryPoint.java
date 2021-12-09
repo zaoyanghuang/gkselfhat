@@ -1,6 +1,6 @@
 package com.gnw.handler;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -17,14 +17,14 @@ import java.util.Map;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        Map<String,Object> map = new HashMap<>();
-        map.put("result", "fail");
-        map.put("msg", "账号未登录！");
+        Map<String,Object> map=new HashMap<>();
+        map.put("result","fail");
+        map.put("msg","账号未登录！");
         response.setCharacterEncoding("utf-8");
         response.setContentType("application/json");
-        PrintWriter responseWriter = response.getWriter();
-        responseWriter.write(JSON.toJSONString(map));
-        responseWriter.flush();
-        responseWriter.close();
+        PrintWriter printWriter=response.getWriter();
+        printWriter.write(new Gson().toJson(map));//print
+        printWriter.flush();
+        printWriter.close();
     }
 }
