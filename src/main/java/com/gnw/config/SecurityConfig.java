@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         * 两种方法去 前一个为踢掉之前的登录  后一个为防止再次登录  都需要配置http.logout.logoutSuccessUrl("/home").invalidateHttpSession(true);*/
 //        http.sessionManagement()
 //                .maximumSessions(1).expiredUrl("/login");
-//        http.sessionManagement()f
+//        http.sessionManagement()
 //                .maximumSessions(1).maxSessionsPreventsLogin(true);
 //        http.logout()
 //                .logoutSuccessUrl("/home")

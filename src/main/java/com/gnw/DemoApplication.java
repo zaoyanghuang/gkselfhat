@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync //开启异步任务
 @SpringBootApplication
+
 public class DemoApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
