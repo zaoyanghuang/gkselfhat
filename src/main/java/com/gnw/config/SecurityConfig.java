@@ -51,14 +51,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PersistentTokenRepository getPersistentTokenRepository(){
         JdbcTokenRepositoryImpl impl = new JdbcTokenRepositoryImpl();
         impl.setDataSource(dataSource);
-        //在项目启动时帮助创建存储rememberme表，
+        //在项目启动时帮助创建存asdd储rememberme表，
         //第二次启动时注释此代码,否则会报错
         //impl.setCreateTableOnStartup(true);
         return impl;
     }
     @Bean
-    public PasswordEncoder getPPasswordEncoder(){
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder getPasswordEncoder(){
+        return new BCryptPasswordEncoder(10);
     }
 
 }

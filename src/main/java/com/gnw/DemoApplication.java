@@ -1,15 +1,16 @@
 package com.gnw;
 
-import com.gnw.listener.SendDataEvent;
-import com.gnw.listener.SendDataListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@EnableTransactionManagement(proxyTargetClass = true)//多表回滚
 @EnableAsync //开启异步任务
 @SpringBootApplication
-
+@EnableWebSecurity
 public class DemoApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);

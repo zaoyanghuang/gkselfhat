@@ -9,6 +9,7 @@ public class LoginController {
     @RequestMapping("/ceshi")
     @ResponseBody
     public String login(){
+        //SecurityContextHolder.getContext().getAuthentication()  从sucutiy中获取用户信息
         return "测试返回数据";
     }
 }

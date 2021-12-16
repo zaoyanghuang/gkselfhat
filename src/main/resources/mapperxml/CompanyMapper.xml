@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnw.mapper.CompanyMapper">
+    <!--新增公司信息-->
+    <insert id="insertCompany" parameterType="com.gnw.pojo.Company">
+        insert into gk_company(companyName,companyLocation,createTime)
+        values
+        (#{companyName,jdbcType=VARCHAR},#{companyLocation,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <!--查询所有公司信息-->
+    <sql id="company_info">
+        companyName,companyLocation,createTime
+    </sql>
+    <select id="selAllCompany" resultType="com.gnw.pojo.Company">
+        select
+        <include refid="company_info"/>
+        from gk_company
+    </select>
+    <update id="updateCompany" parameterType="com.gnw.pojo.Company">
+        update gk_company
+        set companyName=#{companyName,jdbcType=VARCHAR},companyLocation=#{companyLocation,jdbcType=VARCHAR}
+        where
+    </update>
+   
+</mapper>
