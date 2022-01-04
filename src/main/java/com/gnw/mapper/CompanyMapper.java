@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CompanyMapper {
     public void insertCompany(Company company);
     public void selAllCompany();
-    public void updateCompany(Company company);
+    public void updateCompany(Company company,String orgCompanyName);
+    public void deleteCompany(String companyName);
 }

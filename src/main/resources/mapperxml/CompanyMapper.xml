@@ -16,12 +16,20 @@
     <select id="selAllCompany" resultType="com.gnw.pojo.Company">
         select
         <include refid="company_info"/>
-        from gk_company
+        from gk_company where businessState = 1
     </select>
+    <!--更新公司信息-->
     <update id="updateCompany" parameterType="com.gnw.pojo.Company">
         update gk_company
         set companyName=#{companyName,jdbcType=VARCHAR},companyLocation=#{companyLocation,jdbcType=VARCHAR}
-        where
+        where companyName = #{orgCompanyName,jdbcType=VARCHAR}
     </update>
+    <!--删除公司信息  不删除公司信息 只更改状态1为0-->
+    <update id="deleteCompany">
+        update gk_company
+        set businessState = 0
+        where companyName=#{companyName,jdbcType=VARCHAR}
+    </update>
+
    
 </mapper>

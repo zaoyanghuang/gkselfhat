@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnw.mapper.UserDevcieMapper">
+    <!--新增人员设备信息-->
+    <insert id="insertUserDevice" parameterType="com.gnw.pojo.UserDevice">
+        insert into gk_user_device
+        (userName,deviceId,gongkaId,phoneNumber,deptName,companyBelong) values
+        (#{userName,jdbcType=VARCHAR},#{deviceId,jdbcType=VARCHAR},#{gongkaId,jdbcType=VARCHAR},
+        #{phoneNumber,jdbcType=VARCHAR},#{deptName,jdbcType=VARCHAR},#{companyBelong,jdbcType=VARCHAR})
+    </insert>
+    <!--删除人员设备信息-->
+    <delete id="deleteUserDevice">
+        delete from gk_user_device
+        where deviceId=#{deviceId,jdbcType=VARCHAR}
+    </delete>
+    <!--更新设备信息-->
+    <update id="updateUserDevice">
+        update gk_user_device
+        set gongkaId = #{gongkaId,jdbcType=VARCHAR},phoneNumber = #{phoneNumber,jdbcType=VARCHAR},deptName = #{deptName,jdbcType=VARCHAR}
+        where deviceId = #{deviceId,jdbcType=VARCHAR}
+    </update>
+    <!--查询设备信息  非管理员只能查看本公司的  SELECT * FROM gk_user WHERE ('adminServer'='adminServer' OR companyBelong='测试公司2') AND userName LIKE 'ceshi2%'-->
+    <sql id="user_device">
+        userName,deviceId,gongkaId,phoneNumber,deptName,companyBelong
+    </sql>
+    <select id="selUserDevice" resultType="com.gnw.pojo.UserDevice">
+        select
+        <include refid="user_device"/>
+        from gk_user_device
+        where
+        ('adminServer' = #{userRole,jdbcType=VARCHAR} or companyBelong = #{userRole,jdbcType=VARCHAR})
+        and userName like #{userName,jdbcType=VARCHAR}+'%'
+    </select>
+</mapper>

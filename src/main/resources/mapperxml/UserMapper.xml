@@ -12,7 +12,7 @@
     <sql id="user_role_authority_info">
         userName,passWords,realName,phoneNumber,createTime,companyBelong,userRole,authority
     </sql>
-    <select id="selAllByCompany" resultType="UserRoleAuthority">
+    <select id="selAllByCompany" resultType="com.gnw.pojo.UserRoleAuthority">
         select
         <include refid="user_role_authority"/>
             from gk_user_role_authority
@@ -21,7 +21,7 @@
         order by uid limit (#{pageNum,jdbcType=INTEGER}-1)*8,#{lineNum,jdbcType=INTEGER}
     </select>
     <!--通过userName查询本公司的账号-->
-    <select id="selByUserName" resultType="UserRoleAuthority">
+    <select id="selByUserName" resultType="com.gnw.pojo.UserRoleAuthority">
         select
         <include refid="user_role_authority"/>
              from gk_user_role_authority

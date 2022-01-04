@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnw.mapper.EleFenceAlarmMapper">
+    <!--根据工号  公司id 权限查看电子围栏报警信息-->
+    <sql id="ele_fence_alarm_company">
+        gongkaId,startTime,endTime,longitude,latitude,remarks
+    </sql>
+    <select id="selEleFenceAlarm">
+      select
+      <include refid="ele_fence_alarm_company"/>
+      from electronic_fence_alarm
+      where (#{companyId,jdbcType=INTEGER}='88888888' or companyId=#{companyId,jdbcType=INTEGER}) and gongkaId like #{gongkaId,jdbcType=VARCHAR}+'%' and dealState = #{dealState,jdbcType=INTEGER}
+      order by efaid limit (#{pageNum,jdbcType=INTEGER}-1)*#{lineNum,jdbcType=INTEGER},#{lineNum,jdbcType=INTEGER}
+    </select>
+    <!--添加备注  根据工卡号和时间-->
+    <update id="dealEleFenceAlarm">
+        update electronic_fence_alarm
+        set remarks=#{remarks,jdbcType=VARCHAR},dealState=1 where gongkaId=#{gongkaId,jdbcType=VARCHAR} and startTime = #{startTime,jdbcType=TIMESTAMP}
+    </update>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnw.mapper.SosAlarmMapper">
+    <!--根据工卡ID 公司ID 处理状态 查询sos报警信息-->
+    <sql id="sos_alarm_company">
+        gongkaId,startTime,endTime,longitude,latitude,remarks
+    </sql>
+    <select id="selSosAlarm" resultType="com.gnw.pojo.SosAlarmCompany">
+        select
+        <include refid="sos_alarm_company"/>
+        from gk_sos_alarm_company
+        where ('88888888'=#{companyId,jdbcType=INTEGER} or companyId=#{companyId,jdbcType=INTEGER}) and gongkaId like #{gongkaId,jdbcType=VARCHAR}+'%' and dealState = #{dealState,jdbcType=INTEGER}
+    </select>
+    <!--更新sos报警备注信息  同时修改dealState为1-->
+    <update id="dealSosAlarm">
+        update gk_sos_alarm
+        set remarks=#{remarks,jdbcType=VARCHAR},dealState=1 where gongkaId=#{gongkaId,jdbcType=VARCHAR} and startTime = #{startTime,jdbcType=TIMESTAMP}
+    </update>
+</mapper>

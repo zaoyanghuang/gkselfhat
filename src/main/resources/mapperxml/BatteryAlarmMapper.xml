@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gnw.mapper.BatteryAlarmMapper">
+    <!--按照工卡ID和公司ID查询低电量报警  权限范围内本公司信息-->
+    <sql id="battery_alarm">
+        gongkaId,alarmTime,longitude,latitude,batteryNumber
+    </sql>
+    <select id="selBatteryAlarm" resultType="com.gnw.pojo.BatteryAlarm">
+        select
+        <include refid="battery_alarm"/>
+        form gk_battery_alarm
+        where (88888888 = #{companyId,jdbcType=INTEGER} or companyId = #{companyId,jdbcType=INTEGER}) and gongkaId like #{gongkaId,jdbcType=VARCHAR}+'%'
+    </select>
+</mapper>

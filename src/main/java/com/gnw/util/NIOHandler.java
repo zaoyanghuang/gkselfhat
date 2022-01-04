@@ -70,7 +70,6 @@ public class NIOHandler {
             writeChannel.close();
         }catch(IOException e){
             log.info("write异常，异常码："+e.getMessage());
-
         }
 
     }

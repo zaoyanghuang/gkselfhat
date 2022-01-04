@@ -24,7 +24,12 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void updateCompany(Company company) {
-        companyMapper.updateCompany(company);
+    public void updateCompany(Company company,String orgCompanyName) {
+        companyMapper.updateCompany(company,orgCompanyName);
+    }
+
+    @Override
+    public void deleteCompany(String companyName) {
+        companyMapper.deleteCompany(companyName);
     }
 }

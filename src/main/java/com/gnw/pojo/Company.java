@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
 
 public class Company {
-    private int cid;
+    private int companyId;
     private String companyName;
     private String companyLocation;
     private Timestamp createTime;
@@ -22,8 +22,8 @@ public class Company {
     public Company() {
     }
 
-    public Company(int cid, String companyName, String companyLocation, Timestamp createTime, int businessState) {
-        this.cid = cid;
+    public Company(int companyId, String companyName, String companyLocation, Timestamp createTime, int businessState) {
+        this.companyId = companyId;
         this.companyName = companyName;
         this.companyLocation = companyLocation;
         this.createTime = createTime;
@@ -31,11 +31,11 @@ public class Company {
     }
 
     public int getCid() {
-        return cid;
+        return companyId;
     }
 
-    public void setCid(int cid) {
-        this.cid = cid;
+    public void setCid(int companyId) {
+        this.companyId = companyId;
     }
 
     public String getCompanyName() {
@@ -65,7 +65,7 @@ public class Company {
     @Override
     public String toString() {
         return "Company{" +
-                "cid=" + cid +
+                "companyId=" + companyId +
                 ", companyName='" + companyName + '\'' +
                 ", companyLocation='" + companyLocation + '\'' +
                 ", createTime=" + createTime +

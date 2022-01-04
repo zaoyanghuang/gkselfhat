@@ -70,6 +70,7 @@ public class CompanyController {
     @RequestMapping("/updatecompany")
     @ResponseBody
     public Map<String,Object> updateCompany(@RequestParam(value = "companyName")String companyName,
+                                            @RequestParam(value = "orgCompanyName")String orgCompanyName,
                                             @RequestParam(value = "companyLocation")String companyLocation){
         Map<String,Object> map = new HashMap<>();
         UserRoleAuthority userRoleAuthority = (UserRoleAuthority)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -81,7 +82,7 @@ public class CompanyController {
         company.setCompanyName(companyName);
         company.setCompanyLocation(companyLocation);
         try{
-            companyServiceImpl.updateCompany(company);
+            companyServiceImpl.updateCompany(company,orgCompanyName);
             map.put("Success","update success");
         }catch (Exception e){
             map.put("Error", "update Error:"+e.getMessage());
@@ -90,6 +91,24 @@ public class CompanyController {
         return map;
     }
     /*删除公司信息  依然保留公司信息 只是更改状态为0  注销*/
+    @RequestMapping("/deletecompany")
+    @ResponseBody
+    public Map<String,Object> deleteCompany(@RequestParam(value = "companyName")String companyName){
+        Map<String,Object> map = new HashMap<>();
+        UserRoleAuthority userRoleAuthority = (UserRoleAuthority)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userRoleAuthority.getUserRole() != "adminServer"){
+            map.put("Error", "no permission");
+            return map;
+        }
+        try{
+            companyServiceImpl.deleteCompany(companyName);
+            map.put("Success","delete success");
+        }catch (Exception e){
+            map.put("Error", "delete Error:"+e.getMessage());
+            return map;
+        }
+        return map;
+    }
 
 
 }
