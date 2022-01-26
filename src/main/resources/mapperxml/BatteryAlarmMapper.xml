@@ -12,5 +12,6 @@
         <include refid="battery_alarm"/>
         form gk_battery_alarm
         where (88888888 = #{companyId,jdbcType=INTEGER} or companyId = #{companyId,jdbcType=INTEGER}) and gongkaId like #{gongkaId,jdbcType=VARCHAR}+'%'
+        order by baid limit (#{pageNum,jdbcType=INTEGER}-1)*#{lineNum,jdbcType=INTEGER},#{lineNum,jdbcType=INTEGER}
     </select>
 </mapper>

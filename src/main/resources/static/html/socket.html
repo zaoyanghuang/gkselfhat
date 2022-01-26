@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>测试页面</title>
+</head>
+<body>
+<div id="app">
+    <button onclick="websocketInit(ws)">连接</button>
+    <!--<button onclick="sendMsg('8888')">发送</button>-->
+</div>
+<script type="text/javascript">
+var websocket = null;
+var ws = "ws://192.168.10.55:8888/?companyId=88888888";
+function websocketInit(ws){
+    if(websocket == null){
+        websocket = new WebSocket(ws);
+    }
+    //建立连接后触发事件
+	websocket.onopen = function () {
+		console.log("WebSocket连接成功,当前状态："+this.readyState);
+		websocket.send('我是客户端8888');
+		alert('客户端发送数据成功');
+	}
+	//当收到来自服务器的消息时被调用
+	websocket.onmessage = function (event) {
+	      alert('服务端发送数据：'+event.data+"-------websocket当前状态"+this.readyState);
+	      var receive_data=event.data;
+		  receiveData(receive_data);
+	}
+
+	websocket.error=function(event){
+    	    alert("socket连接出错");
+    }
+	 //断开触发事件
+	websocket.onclose = function (event) {
+		alert("close,当前状态："+this.readyState);
+	}
+	window.onbeforeunload=function(){
+	    websocket.close;
+        alert("监听到当前窗口关闭，关闭websocket连接");
+	}
+	function sendMsg(msg){
+       websocket.send(msg);
+    }
+}
+</script>
+</body>
+</html>

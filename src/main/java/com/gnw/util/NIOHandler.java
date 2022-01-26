@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -48,12 +50,15 @@ public class NIOHandler {
                 key.channel().close();
                 key.cancel();
                 System.out.println("客户端" + readChannel.getRemoteAddress() + "连接断开；");
+
             }
         } catch (IOException e) {
             socketClientCount--;
             System.out.println("客户端"+clientAddress+"断开，剩客户端"+socketClientCount+"个");
             log.info("read异常，异常码:" + e.getMessage());
         }
+        //String s = ParseSocketDataUtil.getInstance().bytesToHex(bytes);
+        //System.out.println("收到数据"+s);
         return bytes;
     }
     @Async("asyncServiceExecutor")
@@ -84,6 +89,22 @@ public class NIOHandler {
         while(byteBuffer.hasRemaining()){
             sc.write(byteBuffer);
         }
+    }
+    public void writeData(SelectionKey sk,String data){
+        try {
+            SocketChannel sc = (SocketChannel)sk.channel();
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            buffer.put(data.getBytes());
+            buffer.flip();
+            sc.write(buffer);
+            sc.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.info("write异常，异常码："+e.getMessage());
+        }
+
+
+
     }
     //从通道读取数据
     private JSONObject readDataFromSocket(SelectionKey sk){

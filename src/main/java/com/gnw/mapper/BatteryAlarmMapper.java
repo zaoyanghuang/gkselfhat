@@ -6,6 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 @Mapper
 public interface BatteryAlarmMapper {
-    public List<BatteryAlarm> selBatteryAlarm(String gongkaId,int companyId);
+    public List<BatteryAlarm> selBatteryAlarm(String gongkaId,int companyId,int pageNum,int lineNum);
 
 }

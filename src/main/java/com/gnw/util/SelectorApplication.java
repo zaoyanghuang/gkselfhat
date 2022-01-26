@@ -10,9 +10,14 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -26,7 +31,7 @@ import java.util.*;
  * 通过设置Order的value来指定执行的顺序
  */
 
-
+//@ServerEndpoint(value = "/websocket/{companyId}")
 @Component
 @Order(value = 1) //如果value 1中用while（）无限循环 则到不了2  在一个线程里
 @Slf4j
@@ -61,6 +66,8 @@ public class SelectorApplication implements ApplicationRunner{
     private NIOHandler nioHandler;
     @Override
     public void run(ApplicationArguments args) {
+        args.getOptionValues("companyId");
+
         try {
             initServerSocket();
         } catch (IOException e) {
@@ -74,6 +81,7 @@ public class SelectorApplication implements ApplicationRunner{
         serverSocketChannel = ServerSocketChannel.open();
         //获取ServerSocketChannel绑定的Socket
         ServerSocket ss = serverSocketChannel.socket();
+        //InputStream inputStream = ss.accept().getInputStream();
         //设置ServerSocket监听的端口
         ss.bind(new InetSocketAddress(PORT));
         //设置ServerSocketChannel为非阻塞模式

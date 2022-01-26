@@ -9,4 +9,5 @@ import java.util.List;
 public interface TumbleAlarmMapper {
     public List<TumbleAlarmCompany> selTumbleAlarm(String gongkaId, int companyId, int dealState, int pageNum, int lineNum);
     public void dealTumbleAlarm(String gongkaId, Timestamp startTime, String remarks);
+
 }

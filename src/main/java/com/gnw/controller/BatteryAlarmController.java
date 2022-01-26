@@ -25,13 +25,15 @@ public class BatteryAlarmController {
     * 只能查询权限范围内本公司信息*/
     @RequestMapping("/selbatteryalarm")
     @ResponseBody
-    public Map<String,Object> selBatteryAlarm(@RequestParam(value = "gongkaId")String gongkaId){
+    public Map<String,Object> selBatteryAlarm(@RequestParam(value = "gongkaId")String gongkaId,
+                                              @RequestParam(value = "pageNum")int pageNum,
+                                              @RequestParam(value = "lineNum")int lineNum){
         Map<String,Object> map = new HashMap<>();
         List<BatteryAlarm> batteryAlarmList = new ArrayList<>();
         UserRoleAuthority userRoleAuthority = (UserRoleAuthority) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int companyId = userRoleAuthority.getCompanyId();
         try{
-            batteryAlarmList = batteryAlarmServiceImpl.selBatteryAlarm(gongkaId,companyId);
+            batteryAlarmList = batteryAlarmServiceImpl.selBatteryAlarm(gongkaId,companyId,pageNum,lineNum);
             map.put("batteryAlarmList", batteryAlarmList);
             map.put("Success", "sel success");
         }catch (Exception e){

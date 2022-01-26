@@ -13,7 +13,7 @@ public class BatteryAlarmServiceImpl implements BatteryAlarmService {
     @Autowired
     private BatteryAlarmMapper batteryAlarmMapper;
     @Override
-    public List<BatteryAlarm> selBatteryAlarm(String gongkaId,int companyId) {
-        return batteryAlarmMapper.selBatteryAlarm(gongkaId,companyId);
+    public List<BatteryAlarm> selBatteryAlarm(String gongkaId,int companyId,int pageNum,int lineNum) {
+        return batteryAlarmMapper.selBatteryAlarm(gongkaId,companyId,pageNum,lineNum);
     }
 }

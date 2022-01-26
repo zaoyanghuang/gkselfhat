@@ -56,7 +56,6 @@ public class ParseSocketDataUtil {
 
         return parseSocketDataUtil;
     }
-
     //多包数据拆解后调用单包解析
     List<Byte> cacheBytes = new LinkedList<>(); //缓存
     public void parseAllPackage(SelectionKey key,byte[] receiveBytes ){
@@ -151,6 +150,7 @@ public class ParseSocketDataUtil {
                 if(field_data.length>0){
                     JSONObject fieldLibInfo = parseFieldData(field_data);
                     locationPackageInfo.setFieldLibInfo(fieldLibInfo);
+                    System.out.println("locationPackageInfo信息"+locationPackageInfo);
                     parsedDeviceInfoList.add(locationPackageInfo);
                 }else{
                     log.info("字段集中内容为空");
