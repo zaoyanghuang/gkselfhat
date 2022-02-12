@@ -56,9 +56,44 @@ public class ParseSocketDataUtil {
 
         return parseSocketDataUtil;
     }
+    public LocationPackageInfo parseNettyPackage(byte [] receiveBytes){
+        System.out.println("收到数据长度"+receiveBytes.length+"内容"+bytesToHex(receiveBytes));
+        LocationPackageInfo locationPackageInfo=null;
+        int markIndex = 0;
+        while(receiveBytes.length > markIndex+4){
+            if(receiveBytes[markIndex] == (byte)0xAA && receiveBytes[markIndex+1] == (byte)0xAA){
+                int singelValidlen = byteToInt(receiveBytes[markIndex+3])+2;//包含固定头
+                if(receiveBytes.length >= singelValidlen){ //有效长
+                    byte[] checkBytes = new byte[singelValidlen-3];
+                    System.arraycopy(receiveBytes, markIndex, checkBytes, 0, singelValidlen-3);
+                    byte checkCode = checkCode(checkBytes,singelValidlen-3);
+                    byte orgCheckCode = receiveBytes[markIndex+singelValidlen-3];
+                    if(checkCode == orgCheckCode){//checkCode == orgCheckCode
+                        //消息体字节数组
+                        byte[] singelPackage = new byte[singelValidlen-5];
+                        System.arraycopy(receiveBytes, markIndex+2, singelPackage, 0, singelValidlen-5);
+                        locationPackageInfo = parseValidData(singelPackage);
+                        markIndex += singelValidlen;
+                    }else{
+                        markIndex++;
+                        log.info("单包中校验失败，继续下一包。");
+                        continue;
+                    }
+                }else{
+                    log.info("收到字节数少于有效长度。");
+                    break;
+                }
+            }else{
+                log.info("固定头非AAAA，无效数据包。");
+                markIndex++;
+                continue;
+            }
+        }
+        return locationPackageInfo;
+    }
     //多包数据拆解后调用单包解析
     List<Byte> cacheBytes = new LinkedList<>(); //缓存
-    public void parseAllPackage(SelectionKey key,byte[] receiveBytes ){
+    public void parseAllPackage(byte[] receiveBytes ){
         //System.out.println("收到需要解析数据长度："+receiveBytes.length);
         for(int i=0;i<receiveBytes.length;i++){
             cacheBytes.add(receiveBytes[i]);
@@ -103,6 +138,76 @@ public class ParseSocketDataUtil {
         for(int i = 0;i<endIndex;i++)
             cacheBytes.remove(0);
     }
+    //带返回值单包解析
+    public LocationPackageInfo parseValidData(byte[] validBytes){
+        //System.out.println("单包字节数组"+Arrays.toString(singelPackageBytes));
+        LocationPackageInfo locationPackageInfo = new LocationPackageInfo();
+        int index = 0;
+        byte frameType = validBytes[0];
+        index+=2;
+        if(frameType == LOCATION_PACKAGE){
+            locationPackageInfo.setPackageMarker(0x00000001 & (validBytes[index]>>6));//标志位  握手标志 组包标志
+            locationPackageInfo.setHandMarker(0x00000001 & (validBytes[index]>>7));
+            locationPackageInfo.setReportTime(validBytes[index++]);//上报时间间隔
+            locationPackageInfo.setCachePackageNum(validBytes[index++]);//当前缓存包个数  4
+            index +=2;
+            String device_num=byteToHex(validBytes[index])+byteToHex(validBytes[index-1]);
+            locationPackageInfo.setDevice_num(device_num);//设备编号
+            index +=2;
+            String device_batch_num=byteToHex(validBytes[index])+byteToHex(validBytes[index-1]);
+            locationPackageInfo.setDevice_batch_num(device_batch_num);//设备批次号
+            String device_num_final = device_batch_num+device_num;
+            //判断设备ID是否合法（前端登录后调用查看该设备ID实时位置后合法）  非法则不做处理  合法需要解析
+            if(!device_num_final.equals("00000000")){
+                log.info("解析到设备Id:"+device_num_final);
+                //log.info("设备Id为00000000,跳转至解析下一包");
+                index++;//预留
+                String client="";//客户
+                switch(validBytes[index++]){
+                    case 0:
+                        client = "格纳微标准版";
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                }
+                locationPackageInfo.setClient(client);
+                String company = byteToHex(validBytes[index+1]);
+                locationPackageInfo.setCompany(company);
+                index+=2;
+                String versionNum=String.valueOf(getHeight4Bit(validBytes[index]))+"."+String.valueOf(getLow4Bit(validBytes[index]));
+                locationPackageInfo.setVersionNum(versionNum);
+                //System.out.println("locationPackageInfo对象"+locationPackageInfo.toString());
+                byte [] field_data = new byte[validBytes.length-(index+1)];//字段库集合内容
+                System.arraycopy(validBytes, index+1, field_data, 0, field_data.length);
+                log.info("字段库的字节数组:"+Arrays.toString(field_data));
+                if(field_data.length>0){
+                    JSONObject fieldLibInfo = parseFieldData(field_data);
+                    locationPackageInfo.setFieldLibInfo(fieldLibInfo);
+                    System.out.println("locationPackageInfo信息"+locationPackageInfo);
+                }else{
+                    log.info("字段集中内容为空");
+                }
+            }else{
+                System.out.println("该设备ID不满足条件因此不于解析。继续下一包解析!");
+            }
+
+        }else if(frameType == LOCATION_RESPONSE_PACKAGE){
+
+        }else if(frameType == HAND_PACKAGE){
+
+        }else if(frameType == DOWN_CONTROL_PACKAGE){
+
+        }else if(frameType == HEART_BEAT_PACKAGE){
+
+        }else if(frameType == HEART_BEAT_RESPONSE_PACKAGE){
+
+        }
+        return locationPackageInfo;
+
+    }
+
     //对单包消息体解析
     public void parseSingelPackage(byte[] singelPackageBytes){
         //System.out.println("单包字节数组"+Arrays.toString(singelPackageBytes));
@@ -503,7 +608,7 @@ public class ParseSocketDataUtil {
                 len+=2;
                 byte[] mnc4GBytes = new byte[2];
                 System.arraycopy(bytes, len+1,mnc4GBytes,0,2);
-                int mnc4GNum = bytesToInt( mnc4GBytes);
+                int mnc4GNum = byte2ToInt( mnc4GBytes);
                 len+=2;
                 byte[] pcid4GBytes = new byte[2];
                 System.arraycopy(bytes, len+1,pcid4GBytes,0,2);
@@ -529,7 +634,7 @@ public class ParseSocketDataUtil {
                 len+=2;
                 byte[] mnc2GBytes = new byte[2];
                 System.arraycopy(bytes, len+1,mnc2GBytes,0,2);
-                int mnc2GNum = bytesToInt( mnc2GBytes);
+                int mnc2GNum = byte2ToInt( mnc2GBytes);
                 len+=2;
                 byte[] lac2GBytes = new byte[2];
                 System.arraycopy(bytes, len+1,lac2GBytes,0,2);
@@ -537,7 +642,7 @@ public class ParseSocketDataUtil {
                 len+=2;
                 byte[] cid2GBytes = new byte[2];
                 System.arraycopy(bytes, len+1,cid2GBytes,0,2);
-                int cid2GNum = bytesToInt(cid2GBytes);
+                int cid2GNum = byte2ToInt(cid2GBytes);
                 len+=2;
                 String signalStrong2G =(bytes[len+1]==1?"-":"")+String.valueOf(bytes[len+2]);
                 len+=2;
@@ -614,15 +719,15 @@ public class ParseSocketDataUtil {
                     int ciLiJiCount = bytes[len];
                     byte[] ciLiJiXBytes = new byte[2];
                     System.arraycopy(bytes, len+1,ciLiJiXBytes,0,2);
-                    int ciLiJiX = bytesToInt(ciLiJiXBytes);
+                    int ciLiJiX = byte2ToInt(ciLiJiXBytes);
                     len+=2;
                     byte[] ciLiJiYBytes = new byte[2];
                     System.arraycopy(bytes, len+1,ciLiJiYBytes,0,2);
-                    int ciLiJiY = bytesToInt(ciLiJiYBytes);
+                    int ciLiJiY = byte2ToInt(ciLiJiYBytes);
                     len+=2;
                     byte[] ciLiJiZBytes = new byte[2];
                     System.arraycopy(bytes, len+1,ciLiJiZBytes,0,2);
-                    int ciLiJiZ = bytesToInt(ciLiJiZBytes);
+                    int ciLiJiZ = byte2ToInt(ciLiJiZBytes);
                     len+=2;
                     jsonObject1.put("ciLiJiCount",ciLiJiCount);
                     jsonObject1.put("ciLiJiX",ciLiJiX);
@@ -643,15 +748,15 @@ public class ParseSocketDataUtil {
                     int jiaJiCount = bytes[len];
                     byte[] jiaJiXBytes = new byte[2];
                     System.arraycopy(bytes, len+1,jiaJiXBytes,0,2);
-                    int jiaJiX = bytesToInt(jiaJiXBytes);
+                    int jiaJiX = byte2ToInt(jiaJiXBytes);
                     len+=2;
                     byte[] jiaJiYBytes = new byte[2];
                     System.arraycopy(bytes, len+1,jiaJiYBytes,0,2);
-                    int jiaJiY = bytesToInt(jiaJiYBytes);
+                    int jiaJiY = byte2ToInt(jiaJiYBytes);
                     len+=2;
                     byte[] jiaJiZBytes = new byte[2];
                     System.arraycopy(bytes, len+1,jiaJiZBytes,0,2);
-                    int jiaJiZ = bytesToInt(jiaJiZBytes);
+                    int jiaJiZ = byte2ToInt(jiaJiZBytes);
                     len+=2;
                     jsonObject1.put("jiaJiCount",jiaJiCount);
                     jsonObject1.put("jiaJiX",jiaJiX);
@@ -993,13 +1098,21 @@ public class ParseSocketDataUtil {
     //将低字节在前转为int，高字节在后的byte数组(与IntToByteArray1想对应)
     public int bytesToInt(byte[] bArr) {
         if (bArr.length != 4) {
-            log.info("字节数组转intshibai，数组长度不为4");
+            log.info("字节数组转int失败，数组长度不为4");
             return -1;
         }
         return (int) ((((bArr[3] & 0xff) << 24)
                 | ((bArr[2] & 0xff) << 16)
                 | ((bArr[1] & 0xff) << 8)
                 | ((bArr[0] & 0xff) << 0)));
+    }
+    //两个字节转int
+    public static int byte2ToInt(byte[] b) {
+        int intValue = 0;
+        for (int i = 0; i < b.length; i++) {
+            intValue += (b[i] & 0xFF) << (8 * (3 - i));
+        }
+        return intValue;
     }
     //字节转十六进制
     public String byteToHex(byte b){

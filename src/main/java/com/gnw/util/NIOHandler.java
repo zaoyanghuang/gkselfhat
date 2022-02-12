@@ -22,14 +22,14 @@ public class NIOHandler {
     static int socketClientCount=0;//客户端计数器
     //@SneakyThrows
     @Async("asyncServiceExecutor")
-    public byte[] read(SelectionKey key){
+    public static byte[] read(SelectionKey key){
         byte[] bytes =null;
         SocketChannel readChannel = (SocketChannel) key.channel();
         String clientAddress = null;//客户端地址
         try {
             clientAddress = readChannel.getRemoteAddress().toString();
             //I/O读写操作
-            ByteBuffer buffer = ByteBuffer.allocate(1024);//单次发送字节数超过1024则会报异常
+            ByteBuffer buffer = ByteBuffer.allocate(1024);//单次发送字节数超过1024则会报异常s
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             buffer.clear();
             int len = 0;
@@ -42,10 +42,10 @@ public class NIOHandler {
                 //System.out.println("读取字节长度" + baos.size());
                 bytes = baos.toByteArray();
                 if(baos.size()>0)
-                    ParseSocketDataUtil.getInstance().parseAllPackage(key, baos.toByteArray());
+                    ParseSocketDataUtil.getInstance().parseAllPackage(baos.toByteArray());
                 //将注册写操作添加到队列中
                 //key.attach(baos);
-                SelectorApplication.addwriteQueue(key);
+                SelectorServer.addwriteQueue(key);
             }else{
                 key.channel().close();
                 key.cancel();
