@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.FullHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //读取数据
         LocationPackageInfo locationPackageInfo = (LocationPackageInfo)msg;
         System.out.println("读取到设备"+locationPackageInfo.getDevice_num()+"数据并开始调用算法");
+
 //        channel.writeAndFlush("");
 //        ctx.close();
         //写给客户端

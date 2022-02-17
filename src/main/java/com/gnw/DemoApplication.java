@@ -1,5 +1,6 @@
 package com.gnw;
 
+import com.gnw.util.NativeLoader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -22,6 +23,7 @@ public class DemoApplication {
 		//context.publishEvent(new SendDataEvent(context));
 		// 结束
 		//context.close();
+
 
 	}
 }

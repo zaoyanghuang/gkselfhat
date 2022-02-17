@@ -41,6 +41,25 @@ public class SelectorApplication implements ApplicationRunner{
     private NettyServer nettyServer;
     @Override
     public void run(ApplicationArguments args) {
+        //根据操作系统判断，如果是linux系统则加载c++方法库
+        String systemType = System.getProperty("os.name");
+        String ext = (systemType.toLowerCase().indexOf("win") != -1) ? ".dll" : ".so";
+        System.out.println("操作系统："+ext);
+        if(ext.equals(".so")) {
+            try {
+                NativeLoader.loader( "native" );
+            } catch (Exception e) {
+                System.out.println("加载so库失败");
+            }
+            //System.loadLibrary( "BeaconMap" );
+        }else{
+            try {
+                NativeLoader.loader( "native" );
+            } catch (Exception e) {
+                System.out.println("加载dll库失败");
+            }
+            //System.loadLibrary( "BeaconMap" );
+        }
         //args.getOptionValues("companyId");
         nettyServer.start();
 

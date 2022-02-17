@@ -181,7 +181,7 @@ public class ParseSocketDataUtil {
                 //System.out.println("locationPackageInfo对象"+locationPackageInfo.toString());
                 byte [] field_data = new byte[validBytes.length-(index+1)];//字段库集合内容
                 System.arraycopy(validBytes, index+1, field_data, 0, field_data.length);
-                log.info("字段库的字节数组:"+Arrays.toString(field_data));
+                log.info("字段库的字节数组:"+bytesToHex(field_data));//Arrays.toString(field_data)
                 if(field_data.length>0){
                     JSONObject fieldLibInfo = parseFieldData(field_data);
                     locationPackageInfo.setFieldLibInfo(fieldLibInfo);
