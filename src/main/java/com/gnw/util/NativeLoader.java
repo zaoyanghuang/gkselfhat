@@ -17,7 +17,7 @@ public class NativeLoader {
      */
     public synchronized static void loader(String dirPath) throws IOException, ClassNotFoundException {
         Enumeration<URL> dir = Thread.currentThread().getContextClassLoader().getResources(dirPath);
-        System.out.println("进入loader方法,dir:"+dir.toString());
+        //System.out.println("进入loader方法,dir:"+dir.toString());
         // 获取操作系统类型
         String systemType = System.getProperty("os.name");
         //String systemArch = System.getProperty("os.arch");
@@ -68,7 +68,7 @@ public class NativeLoader {
                 System.load(file.getPath());
                 System.out.println("加载native文件 :" + file + "成功!!");
             } catch (UnsatisfiedLinkError e) {
-                System.out.println("加载native文件 :" + file + "失败!!请确认操作系统是X86还是X64!!!");
+                System.out.println("加载native文件 :" + file + "失败!!请确认操作系统是X86还是X64!!!异常码："+e.getMessage());
             }
         }
     }
