@@ -1,0 +1,79 @@
+Q:		at org.springframework.boot.web.servlet.support.ErrorPageFilter.doFilter(ErrorPageFilter.java:126)     [spring-boot-2.3.4.RELEASE.jar:2.3.4.RELEASE]
+        at org.springframework.boot.web.servlet.support.ErrorPageFilter.access$000(ErrorPageFilter.java:64) [spring-boot-2.3.4.RELEASE.jar:2.3.4.RELEASE]
+        at org.springframework.boot.web.servlet.support.ErrorPageFilter$1.doFilterInternal(ErrorPageFilter.java:101) [spring-boot-2.3.4.RELEASE.jar:2.3.4.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.9.RELEASE.jar:5.2.9.RELEASE]
+        at org.springframework.boot.web.servlet.support.ErrorPageFilter.doFilter(ErrorPageFilter.java:119) [spring-boot-2.3.4.RELEASE.jar:2.3.4.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:240) [catalina.jar:8.0.45]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:207) [catalina.jar:8.0.45]
+        at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.9.RELEASE.jar:5.2.9.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.9.RELEASE.jar:5.2.9.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:240) [catalina.jar:8.0.45]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:207) [catalina.jar:8.0.45]
+        at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:212) [catalina.jar:8.0.45]
+        at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:94) [catalina.jar:8.0.45]
+        at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:504) [catalina.jar:8.0.45]
+        at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:141) [catalina.jar:8.0.45]
+        at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:79) [catalina.jar:8.0.45]
+        at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:620) [catalina.jar:8.0.45]
+        at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:88) [catalina.jar:8.0.45]
+        at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:502) [catalina.jar:8.0.45]
+        at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1132) [tomcat-coyote.jar:8.0.45]
+        at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:684) [tomcat-coyote.jar:8.0.45]
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1533) [tomcat-coyote.jar:8.0.45]
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.run(NioEndpoint.java:1489) [tomcat-coyote.jar:8.0.45]
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_161]
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_161]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-util.jar:8.0.45]
+        at java.lang.Thread.run(Thread.java:748) [na:1.8.0_161]
+Caused by: javax.el.ELException: Unable to find ExpressionFactory of type: # Licensed to the Apache Software Foundation (ASF) under one or more
+        at javax.el.ExpressionFactory.newInstance(ExpressionFactory.java:154) ~[el-api.jar:3.0.FR]
+        at javax.el.ExpressionFactory.newInstance(ExpressionFactory.java:93) ~[el-api.jar:3.0.FR]
+        at org.apache.jasper.compiler.PageInfo.<init>(PageInfo.java:79) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:114) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.compiler.Compiler.compile(Compiler.java:358) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.compiler.Compiler.compile(Compiler.java:338) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.compiler.Compiler.compile(Compiler.java:325) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:586) ~[jasper.jar:8.0.45]
+        ... 79 common frames omitted
+Caused by: java.lang.ClassNotFoundException: # Licensed to the Apache Software Foundation (ASF) under one or more
+        at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1333) ~[catalina.jar:8.0.45]
+        at org.apache.catalina.loader.WebappClassLoaderBase.loadClass(WebappClassLoaderBase.java:1167) ~[catalina.jar:8.0.45]
+        at javax.el.ExpressionFactory.newInstance(ExpressionFactory.java:147) ~[el-api.jar:3.0.FR]
+        ... 86 common frames omitted
+
+2021-03-24 17:04:20.815 ERROR 6589 --- [nio-9005-exec-4] o.s.b.w.servlet.support.ErrorPageFilter  : Forwarding to error page from request [/login.jsp] due to exception [Unable to compile class for JSP]
+
+org.apache.jasper.JasperException: Unable to compile class for JSP
+        at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:601) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:363) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:396) ~[jasper.jar:8.0.45]
+        at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:340) ~[jasper.jar:8.0.45]
+        at javax.servlet.http.HttpServlet.service(HttpServlet.java:729) ~[servlet-api.jar:na]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:292) [catalina.jar:8.0.45]
+
+ Q：  注意清空一下tomcat/work目录
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<!--移除嵌入式tomcat插件,用于spring boot中内嵌的tomcat包依赖排除,不然会产生冲突-->
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		或者
+	    <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<!--打包的时候可以不用包进去，别的设施会提供。事实上该依赖理论上可以参与编译，测试，运行等周期。
+            相当于compile，但是打包阶段做了exclude操作-->
+			<scope>provided</scope>
+			上面两个依赖同样效果
+		</dependency>
+				<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
